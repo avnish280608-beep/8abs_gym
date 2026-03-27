@@ -4,25 +4,12 @@ import PageHero from '../components/PageHero'
 import Membership from '../components/Membership'
 
 const WA_NUMBER  = '919044405342'
-const UPI_VPA    = '9044405342@upi'
 const WA_GENERAL = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent("Hi! I'd like to know more about memberships at 8 ABS Gym.")}`
-const GPAY_GENERAL = `upi://pay?pa=${UPI_VPA}&pn=8+ABS+Gym&cu=INR&tn=8+ABS+Gym+Membership`
 
 function WhatsAppIcon({ className = 'w-5 h-5' }) {
   return (
     <svg className={className} fill="currentColor" viewBox="0 0 24 24">
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-    </svg>
-  )
-}
-
-function GooglePayIcon({ className = 'w-5 h-5' }) {
-  return (
-    <svg className={className} viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-      <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.5 6.5 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.2-.1-2.4-.4-3.5z"/>
-      <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 16.1 18.9 13 24 13c3 0 5.8 1.1 7.9 3l5.7-5.7C34.5 6.5 29.6 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
-      <path fill="#4CAF50" d="M24 44c5.5 0 10.4-2.1 14.2-5.5l-6.6-5.5C29.6 35 26.9 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.6 5.1C9.6 39.6 16.3 44 24 44z"/>
-      <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.3 4.1-4.2 5.4l6.6 5.5C37.4 38 44 33 44 24c0-1.2-.1-2.4-.4-3.5z"/>
     </svg>
   )
 }
@@ -91,13 +78,12 @@ export default function MembershipPage() {
 
       <Membership />
 
-      {/* WhatsApp + GPay dual CTA Banner */}
+      {/* WhatsApp CTA Banner */}
       <section className="py-16 bg-charcoal relative overflow-hidden">
         <div className="absolute inset-0 bg-grid opacity-40" />
-        <div className="relative max-w-5xl mx-auto px-6">
-          <div className="grid sm:grid-cols-2 gap-5">
-
-            {/* WhatsApp card */}
+        <div className="relative max-w-2xl mx-auto px-6">
+          
+            {/* WhatsApp card - Now centered and solo */}
             <div className="rounded-sm border border-green-500/30 bg-gradient-to-r from-green-500/10 via-green-500/5 to-transparent p-7 flex items-center gap-5">
               <div className="w-12 h-12 bg-green-500/15 border border-green-500/30 rounded-sm flex items-center justify-center flex-shrink-0">
                 <WhatsAppIcon className="w-6 h-6 text-green-400" />
@@ -117,25 +103,6 @@ export default function MembershipPage() {
               </div>
             </div>
 
-            {/* Google Pay card */}
-            <div className="rounded-sm border border-blue-500/30 bg-gradient-to-r from-blue-500/10 via-blue-500/5 to-transparent p-7 flex items-center gap-5">
-              <div className="w-12 h-12 bg-blue-500/15 border border-blue-500/30 rounded-sm flex items-center justify-center flex-shrink-0">
-                <GooglePayIcon className="w-6 h-6" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="text-white font-bold mb-1">Pay via Google Pay</h3>
-                <p className="text-gray-400 text-xs leading-relaxed mb-3">UPI to <span className="text-white font-semibold">9044405342@upi</span> — amount pre-set per plan.</p>
-                <a
-                  href={GPAY_GENERAL}
-                  className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2.5 rounded-sm uppercase tracking-widest text-xs transition-all duration-200 active:scale-95"
-                >
-                  <GooglePayIcon className="w-4 h-4" />
-                  Open GPay
-                </a>
-              </div>
-            </div>
-
-          </div>
         </div>
       </section>
 
