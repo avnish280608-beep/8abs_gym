@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom'
 import PageHero from '../components/PageHero'
 
 const WA_NUMBER = '919044405342'
-const UPI_ID = '9044405342@upi' // Your Google Pay linked UPI ID
+const UPI_ID = '9044405342@upi'
 
 const plans = [
   {
     name: 'Day Pass',
-    price: 800,
+    price: 300,
     duration: 'Single Session',
     features: ['Full Equipment Access', 'Floor Trainer Support', 'Locker Room'],
     color: 'border-gray-500',
@@ -39,17 +39,10 @@ function WhatsAppIcon({ className = 'w-5 h-5' }) {
 }
 
 export default function MembershipPage() {
-  const generateUPILink = (amount, planName) => {
-    // Standard UPI Deep link format
-    const baseUrl = "upi://pay";
-    const params = new URLSearchParams({
-      pa: UPI_ID,
-      pn: "8 ABS Gym",
-      am: amount.toFixed(2),
-      cu: "INR",
-      tn: `Payment for ${planName} - 8 ABS Gym`
-    });
-    return `${baseUrl}?${params.toString()}`;
+  const handlePayment = (amount, planName) => {
+    // Exact UPI deep link for mobile apps
+    const upiLink = `upi://pay?pa=${UPI_ID}&pn=8ABSGYM&am=${amount}&cu=INR&tn=${encodeURIComponent("Gym Plan: " + planName)}`;
+    window.location.href = upiLink;
   };
 
   return (
@@ -58,7 +51,7 @@ export default function MembershipPage() {
         subtitle="Join the Elite"
         title="Membership"
         titleAccent="Plans"
-        description="Choose your plan and pay instantly via Google Pay or any UPI app."
+        description="Choose your plan and pay instantly via any UPI app (GPay, PhonePe, Paytm)."
         bgImage="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1920&q=80"
       />
 
@@ -92,38 +85,36 @@ export default function MembershipPage() {
                   ))}
                 </ul>
 
-                <a 
-                  href={generateUPILink(plan.price, plan.name)}
-                  className="btn-primary w-full justify-center group"
+                <button 
+                  onClick={() => handlePayment(plan.price, plan.name)}
+                  className="btn-primary w-full justify-center group uppercase text-xs tracking-widest"
                 >
-                  Pay with GPay
-                  <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </a>
+                  Pay via UPI / GPay
+                </button>
               </div>
             ))}
           </div>
           
-          <p className="text-center text-gray-500 text-xs mt-12 italic">
-            * After payment, please take a screenshot and share it with us on WhatsApp for account activation.
-          </p>
+          <div className="mt-16 card-dark p-8 rounded-sm text-center border border-white/5">
+            <p className="text-gray-300 mb-4">Paid using GPay? Just share your screenshot here:</p>
+            <a
+              href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent("Hi! I just paid for a membership. Here is my screenshot.")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-4 rounded-sm uppercase tracking-widest text-sm transition-all"
+            >
+              <WhatsAppIcon />
+              Verify on WhatsApp
+            </a>
+          </div>
         </div>
       </section>
 
-      {/* WhatsApp Support Section */}
-      <section className="py-16 bg-charcoal-mid border-y border-white/5">
-        <div className="max-w-2xl mx-auto px-6 text-center">
-          <h3 className="text-white font-bold mb-4">Need a Custom Plan?</h3>
-          <p className="text-gray-400 text-sm mb-8">If you prefer paying in cash or want to discuss corporate/student discounts, chat with us.</p>
-          <a
-            href={`https://wa.me/${WA_NUMBER}`}
-            className="inline-flex items-center gap-3 bg-green-500 text-white font-bold px-8 py-4 rounded-sm uppercase tracking-widest text-sm hover:bg-green-600 transition-all"
-          >
-            <WhatsAppIcon />
-            WhatsApp Support
-          </a>
-        </div>
+      {/* Standard Footer Navigation */}
+      <section className="py-12 bg-charcoal-mid text-center">
+        <Link to="/contact" className="text-gray-500 hover:text-crimson text-sm transition-colors">
+          Need help? Visit our Contact Page
+        </Link>
       </section>
     </>
   )
