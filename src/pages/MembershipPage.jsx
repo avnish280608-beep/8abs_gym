@@ -8,7 +8,7 @@ const UPI_ID = '9044405342@upi' // Your Google Pay linked UPI ID
 const plans = [
   {
     name: 'Day Pass',
-    price: 300,
+    price: 800,
     duration: 'Single Session',
     features: ['Full Equipment Access', 'Floor Trainer Support', 'Locker Room'],
     color: 'border-gray-500',
