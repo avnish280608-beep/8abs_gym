@@ -1,10 +1,34 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import PageHero from '../components/PageHero'
-import Membership from '../components/Membership'
 
-const WA_NUMBER  = '919044405342'
-const WA_GENERAL = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent("Hi! I'd like to know more about memberships at 8 ABS Gym.")}`
+const WA_NUMBER = '919044405342'
+const UPI_ID = '9044405342@upi' // Your Google Pay linked UPI ID
+
+const plans = [
+  {
+    name: 'Day Pass',
+    price: 300,
+    duration: 'Single Session',
+    features: ['Full Equipment Access', 'Floor Trainer Support', 'Locker Room'],
+    color: 'border-gray-500',
+  },
+  {
+    name: 'Monthly',
+    price: 1000,
+    duration: '30 Days',
+    features: ['Full Equipment Access', 'Diet Consultation', 'Floor Trainer', 'No Join Fee'],
+    color: 'border-crimson',
+    popular: true,
+  },
+  {
+    name: 'Yearly',
+    price: 10000,
+    duration: '365 Days',
+    features: ['Best Value', 'Personalized Workout Plan', 'Diet Chart', 'All Gym Access'],
+    color: 'border-yellow-500',
+  }
+]
 
 function WhatsAppIcon({ className = 'w-5 h-5' }) {
   return (
@@ -14,166 +38,91 @@ function WhatsAppIcon({ className = 'w-5 h-5' }) {
   )
 }
 
-const faqs = [
-  {
-    q: 'Do you offer a free trial?',
-    a: 'Yes! Call us at 090444 05342 to book a free trial session. We want you to experience 8 ABS Gym before committing to any plan.',
-  },
-  {
-    q: 'Are the membership plans fixed-term contracts?',
-    a: 'No lock-ins on our daily or monthly plans. We believe in earning your membership every month through results and service quality.',
-  },
-  {
-    q: 'Is diet consultation included in all plans?',
-    a: 'Diet consultation is included from the 1-Month Plan and above. Our coaches will help you set up your macronutrient targets based on your goal.',
-  },
-  {
-    q: 'What are the gym timings?',
-    a: 'We are open 7 days a week from 6:00 AM to 10:00 PM. There are no holidays — your fitness schedule comes first.',
-  },
-  {
-    q: 'Can students get special discounts?',
-    a: 'Yes, we offer student-friendly pricing. Bring your valid college ID and speak to our staff about available student plans.',
-  },
-  {
-    q: 'Is the gym air-conditioned?',
-    a: 'Absolutely. The entire training floor is fully air-conditioned, designed to keep you comfortable and performing at your best.',
-  },
-]
-
-function FAQItem({ q, a }) {
-  const [open, setOpen] = useState(false)
-  return (
-    <div className="border-b border-white/10 last:border-0">
-      <button
-        className="w-full flex items-center justify-between py-5 text-left gap-4 group"
-        onClick={() => setOpen(!open)}
-        aria-expanded={open}
-      >
-        <span className="text-white font-semibold group-hover:text-crimson transition-colors duration-200">{q}</span>
-        <svg
-          className={`w-5 h-5 flex-shrink-0 text-crimson transition-transform duration-300 ${open ? 'rotate-45' : ''}`}
-          fill="none" stroke="currentColor" viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-        </svg>
-      </button>
-      {open && (
-        <p className="text-gray-400 text-sm leading-relaxed pb-5 pr-8">{a}</p>
-      )}
-    </div>
-  )
-}
-
 export default function MembershipPage() {
+  const generateUPILink = (amount, planName) => {
+    // Standard UPI Deep link format
+    const baseUrl = "upi://pay";
+    const params = new URLSearchParams({
+      pa: UPI_ID,
+      pn: "8 ABS Gym",
+      am: amount.toFixed(2),
+      cu: "INR",
+      tn: `Payment for ${planName} - 8 ABS Gym`
+    });
+    return `${baseUrl}?${params.toString()}`;
+  };
+
   return (
     <>
       <PageHero
-        subtitle="Join 8 ABS Gym"
+        subtitle="Join the Elite"
         title="Membership"
         titleAccent="Plans"
-        description="No hidden fees. No long-term traps. Just the plan that fits your goals and your schedule."
+        description="Choose your plan and pay instantly via Google Pay or any UPI app."
         bgImage="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1920&q=80"
       />
 
-      <Membership />
+      <section className="py-24 bg-charcoal">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-3 gap-8">
+            {plans.map((plan) => (
+              <div 
+                key={plan.name} 
+                className={`relative card-dark p-8 rounded-sm border-t-4 ${plan.color} flex flex-col`}
+              >
+                {plan.popular && (
+                  <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-crimson text-white text-[10px] uppercase tracking-widest px-3 py-1 font-bold">
+                    Most Popular
+                  </span>
+                )}
+                <h3 className="text-white text-xl font-bold mb-1">{plan.name}</h3>
+                <div className="flex items-baseline gap-1 mb-6">
+                  <span className="text-4xl font-display text-white">₹{plan.price}</span>
+                  <span className="text-gray-500 text-sm">/ {plan.duration}</span>
+                </div>
+                
+                <ul className="space-y-4 mb-10 flex-1">
+                  {plan.features.map(f => (
+                    <li key={f} className="text-gray-400 text-sm flex items-center gap-3">
+                      <svg className="w-4 h-4 text-crimson" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                      </svg>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
 
-      {/* WhatsApp CTA Banner */}
-      <section className="py-16 bg-charcoal relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid opacity-40" />
-        <div className="relative max-w-2xl mx-auto px-6">
-          
-            {/* WhatsApp card - Now centered and solo */}
-            <div className="rounded-sm border border-green-500/30 bg-gradient-to-r from-green-500/10 via-green-500/5 to-transparent p-7 flex items-center gap-5">
-              <div className="w-12 h-12 bg-green-500/15 border border-green-500/30 rounded-sm flex items-center justify-center flex-shrink-0">
-                <WhatsAppIcon className="w-6 h-6 text-green-400" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="text-white font-bold mb-1">Chat on WhatsApp</h3>
-                <p className="text-gray-400 text-xs leading-relaxed mb-3">Ask questions or enquire about plans instantly.</p>
-                <a
-                  href={WA_GENERAL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold px-5 py-2.5 rounded-sm uppercase tracking-widest text-xs transition-all duration-200 active:scale-95"
+                <a 
+                  href={generateUPILink(plan.price, plan.name)}
+                  className="btn-primary w-full justify-center group"
                 >
-                  <WhatsAppIcon className="w-4 h-4" />
-                  Chat Now
+                  Pay with GPay
+                  <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
                 </a>
               </div>
-            </div>
-
+            ))}
+          </div>
+          
+          <p className="text-center text-gray-500 text-xs mt-12 italic">
+            * After payment, please take a screenshot and share it with us on WhatsApp for account activation.
+          </p>
         </div>
       </section>
 
-      {/* What's Included breakdown */}
-      <section className="py-24 bg-charcoal relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-crimson/5 rounded-full blur-3xl" />
-        <div className="relative max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <p className="section-subtitle">Included in Every Plan</p>
-            <h2 className="section-title mb-4">
-              Always <span className="text-crimson">Included,</span>
-              <br />No Exceptions.
-            </h2>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: '🏋️', title: 'Full Equipment Access', desc: 'Free weights, machines, cables & cardio — all available every visit.' },
-              { icon: '❄️', title: 'Air-Conditioned Floor', desc: 'Comfortable training environment all year round.' },
-              { icon: '👨‍💼', title: 'Floor Trainer', desc: 'A certified trainer is always on the floor to guide you.' },
-              { icon: '🚿', title: 'Locker Room', desc: 'Clean, well-maintained locker room and restroom facilities.' },
-            ].map((item) => (
-              <div key={item.title} className="card-dark p-6 rounded-sm text-center hover:-translate-y-1 transition-all duration-300">
-                <div className="text-4xl mb-4">{item.icon}</div>
-                <h3 className="text-white font-bold mb-2">{item.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="py-24 bg-charcoal-mid relative">
-        <div className="absolute inset-0 bg-grid" />
-        <div className="relative max-w-3xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <p className="section-subtitle">Got Questions?</p>
-            <h2 className="section-title mb-4">
-              Frequently <span className="text-crimson">Asked</span>
-            </h2>
-          </div>
-          <div className="card-dark rounded-sm px-6 divide-y divide-white/10">
-            {faqs.map((faq) => (
-              <FAQItem key={faq.q} {...faq} />
-            ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <p className="text-gray-400 mb-4">Still have questions? We're happy to help.</p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href={WA_GENERAL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-4 rounded-sm uppercase tracking-widest text-sm transition-all duration-200 active:scale-95 shadow-lg shadow-green-500/20"
-              >
-                <WhatsAppIcon />
-                WhatsApp Us
-              </a>
-              <a href="tel:09044405342" className="btn-primary">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/>
-                </svg>
-                Call Us Now
-              </a>
-              <Link to="/contact" className="btn-outline">
-                Contact Page
-              </Link>
-            </div>
-          </div>
+      {/* WhatsApp Support Section */}
+      <section className="py-16 bg-charcoal-mid border-y border-white/5">
+        <div className="max-w-2xl mx-auto px-6 text-center">
+          <h3 className="text-white font-bold mb-4">Need a Custom Plan?</h3>
+          <p className="text-gray-400 text-sm mb-8">If you prefer paying in cash or want to discuss corporate/student discounts, chat with us.</p>
+          <a
+            href={`https://wa.me/${WA_NUMBER}`}
+            className="inline-flex items-center gap-3 bg-green-500 text-white font-bold px-8 py-4 rounded-sm uppercase tracking-widest text-sm hover:bg-green-600 transition-all"
+          >
+            <WhatsAppIcon />
+            WhatsApp Support
+          </a>
         </div>
       </section>
     </>
